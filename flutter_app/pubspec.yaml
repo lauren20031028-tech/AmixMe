@@ -1,0 +1,28 @@
+name: friendmatch
+description: App para hacer amigas cerca de ti
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.1.0
+  provider: ^6.1.1
+  geolocator: ^10.1.0
+  permission_handler: ^11.0.1
+  shared_preferences: ^2.2.2
+  image_picker: ^1.0.4
+  cached_network_image: ^3.3.0
+  flutter_card_swiper: ^6.0.0
+  intl: ^0.18.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true

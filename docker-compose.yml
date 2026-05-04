@@ -1,0 +1,52 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: friendmatch_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass123
+      MYSQL_DATABASE: friendmatch
+      MYSQL_USER: friendmatch_user
+      MYSQL_PASSWORD: friendpass123
+      MYSQL_CHARACTER_SET_SERVER: utf8mb4
+      MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - friendmatch_network
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "friendmatch_user", "-pfriendpass123"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  backend:
+    build: ./backend
+    container_name: friendmatch_backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/friendmatch?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      SPRING_DATASOURCE_USERNAME: friendmatch_user
+      SPRING_DATASOURCE_PASSWORD: friendpass123
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - friendmatch_network
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+
+volumes:
+  mysql_data:
+
+networks:
+  friendmatch_network:
+    driver: bridge
