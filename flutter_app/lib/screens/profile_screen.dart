@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../models/user.dart';
+import '../models/user_photo.dart';
 import '../theme/app_theme.dart';
 import 'photo_manager_screen.dart';
 
@@ -20,6 +21,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Set<int> _generosSel   = {};
   bool _isLoading = true;
   bool _isSaving  = false;
+  UserPhoto? _fotoPrincipal;
 
   // Estados de expansión de bloques completos
   bool _interesesExpanded = false;
@@ -174,6 +176,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       _isLoading = false;
     });
+
+    // Cargar foto principal en paralelo
+    if (auth.userId != null) {
+      try {
+        final photos = await auth.apiService.getUserPhotos(auth.userId!);
+        if (mounted && photos.isNotEmpty) {
+          final primary = photos.firstWhere(
+            (p) => p.isPrimary,
+            orElse: () => photos.first,
+          );
+          setState(() => _fotoPrincipal = primary);
+        }
+      } catch (_) {}
+    }
   }
 
   Future<void> _guardar() async {
@@ -379,19 +395,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       border: Border.all(
                           color: Colors.white60, width: 2.5),
                     ),
-                    child: const Icon(Icons.person_rounded,
-                        size: 48, color: Colors.white),
+                    child: ClipOval(
+                      child: _fotoPrincipal != null
+                          ? Image.network(
+                              context.read<AuthProvider>().apiService
+                                  .getPhotoUrl(_fotoPrincipal!.photoUrl),
+                              fit: BoxFit.cover,
+                              width: 86,
+                              height: 86,
+                              errorBuilder: (_, __, ___) => const Icon(
+                                  Icons.person_rounded,
+                                  size: 48,
+                                  color: Colors.white),
+                            )
+                          : const Icon(Icons.person_rounded,
+                              size: 48, color: Colors.white),
+                    ),
                   ),
                   Positioned(
                     bottom: 0,
                     right: 0,
                     child: GestureDetector(
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const PhotoManagerScreen(),
-                        ),
-                      ),
+                      onTap: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const PhotoManagerScreen(),
+                          ),
+                        );
+                        // Recargar foto principal al volver
+                        final auth = context.read<AuthProvider>();
+                        if (auth.userId != null) {
+                          try {
+                            final photos = await auth.apiService
+                                .getUserPhotos(auth.userId!);
+                            if (mounted && photos.isNotEmpty) {
+                              final primary = photos.firstWhere(
+                                (p) => p.isPrimary,
+                                orElse: () => photos.first,
+                              );
+                              setState(() => _fotoPrincipal = primary);
+                            } else if (mounted) {
+                              setState(() => _fotoPrincipal = null);
+                            }
+                          } catch (_) {}
+                        }
+                      },
                       child: Container(
                         width: 28,
                         height: 28,

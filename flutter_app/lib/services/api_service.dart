@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/user.dart';
 import '../models/message.dart';
@@ -414,10 +415,22 @@ class ApiService {
       
       // Agregar archivo - compatible con web y móvil
       final bytes = await imageFile.readAsBytes();
+      final filename = imageFile.name.isNotEmpty ? imageFile.name : 'photo.jpg';
+      
+      // Detectar content type por extensión para que el backend lo acepte
+      final ext = filename.split('.').last.toLowerCase();
+      final mimeType = switch (ext) {
+        'png'  => 'image/png',
+        'gif'  => 'image/gif',
+        'webp' => 'image/webp',
+        _      => 'image/jpeg',
+      };
+      
       request.files.add(http.MultipartFile.fromBytes(
         'file',
         bytes,
-        filename: imageFile.name.isNotEmpty ? imageFile.name : 'photo.jpg',
+        filename: filename,
+        contentType: MediaType.parse(mimeType),
       ));
       
       // Agregar parámetros

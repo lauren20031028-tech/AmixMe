@@ -1,67 +1,81 @@
 import 'package:flutter/material.dart';
 
-// ── Paleta de colores MOON ───────────────────────────────────────────────────
+// ── Paleta de colores PASTEL ROSA ────────────────────────────────────────────
 class AppColors {
-  // Paleta Moon
-  static const blush      = Color(0xFFF5D5E0); // Rosa muy claro
-  static const lavender   = Color(0xFF6667AB); // Azul lavanda
-  static const mauve      = Color(0xFF7B337E); // Morado medio
-  static const purple     = Color(0xFF420D4B); // Morado oscuro
-  static const deepPurple = Color(0xFF210635); // Morado muy oscuro
+  // Rosa pastel principal
+  static const pastelPink     = Color(0xFFFFB6C1); // Rosa pastel claro
+  static const pastelRose     = Color(0xFFFFC0CB); // Rosa tradicional pastel
+  static const softPeach      = Color(0xFFFFDAB9); // Durazno suave
+  static const powderPink     = Color(0xFFEFD1D8); // Rosa pólvora
+  static const blush          = Color(0xFFFADadd); // Rosa ruborizado
+  
+  // Rosas más intensos para acentos
+  static const roseGold       = Color(0xFFE8B4B8); // Oro rosa
+  static const dustyRose      = Color(0xFFDCAE96); // Rosa polvoriento
+  static const warmPink       = Color(0xFFF4A4A4); // Rosa cálido
+  
+  // Para degrade hacia lavanda suave
+  static const softLilac      = Color(0xFFE6D7E8); // Lila suave
+  static const paleLavender   = Color(0xFFDDC9E2); // Lavanda pálido
 
   // Aliases de compatibilidad
-  static const pink       = lavender;
-  static const salmon     = blush;
-  static const coral      = lavender;
-  static const teal       = mauve;
-  static const slateBlue  = purple;
+  static const pink           = pastelPink;
+  static const salmon         = softPeach;
+  static const coral          = warmPink;
+  static const teal           = warmPink; // Alias para coral/warmPink
+  static const slateBlue      = paleLavender; // Alias para lilac suave
+  static const lavender       = softLilac;
+  static const mauve          = paleLavender;
+  static const purple         = Color(0xFFBFA4C4); // Morado suave rosado
+  static const deepPurple     = Color(0xFF9A7B9A); // Morado oscuro suave
 
-  // Neutros
-  static const background    = Color(0xFFFFF5F9); // fondo rosado muy claro
-  static const surface       = Colors.white;
-  static const textPrimary   = Color(0xFF210635); // morado muy oscuro
-  static const textSecondary = Color(0xFF7B337E); // morado medio
+  // Neutros con tono rosado
+  static const background     = Color(0xFFFFF0F3); // fondo rosa muy claro
+  static const surface        = Colors.white;
+  static const textPrimary    = Color(0xFF5C4A52); // gris-marrón cálido oscuro
+  static const textSecondary  = Color(0xFF8B6B73); // gris-marrón medio
 
   // Gradientes
-  static const gradientStart = blush;
-  static const gradientMid   = lavender;
-  static const gradientEnd   = deepPurple;
+  static const gradientStart  = powderPink;
+  static const gradientMid   = pastelPink;
+  static const gradientEnd   = warmPink;
 
-  // Gradiente principal
+  // Gradiente principal - rosa pastel a cálido
   static const LinearGradient primaryGradient = LinearGradient(
-    colors: [lavender, mauve, purple],
+    colors: [powderPink, pastelPink, warmPink, roseGold],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
+    stops: [0.0, 0.4, 0.7, 1.0],
   );
 
   // Gradiente suave (fondos)
   static const LinearGradient softGradient = LinearGradient(
-    colors: [blush, Color(0xFFF0E5F5)],
+    colors: [blush, Color(0xFFFFF5F5), Color(0xFFFFF0F5)],
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
   );
 
   // Gradiente de botón
   static const LinearGradient buttonGradient = LinearGradient(
-    colors: [lavender, purple],
+    colors: [pastelPink, warmPink],
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
   );
 
-  // Gradiente completo (4 colores)
+  // Gradiente completo (5 colores)
   static const LinearGradient fullGradient = LinearGradient(
-    colors: [lavender, mauve, purple, deepPurple],
+    colors: [blush, powderPink, pastelPink, warmPink, roseGold],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    stops: [0.0, 0.4, 0.7, 1.0],
+    stops: [0.0, 0.25, 0.5, 0.75, 1.0],
   );
 }
 
 // ── Tema global ──────────────────────────────────────────────────────────────
 class AppTheme {
   static ThemeData get theme {
-    const primary = AppColors.lavender;
-    const accent  = AppColors.purple;
+    const primary = AppColors.pastelPink;
+    const accent  = AppColors.warmPink;
 
     return ThemeData(
       useMaterial3: true,
@@ -72,6 +86,7 @@ class AppTheme {
         surface: AppColors.surface,
         // ignore: deprecated_member_use
         background: AppColors.background,
+        tertiary: AppColors.softLilac,
       ),
       scaffoldBackgroundColor: AppColors.background,
       fontFamily: 'Roboto',
@@ -129,11 +144,11 @@ class AppTheme {
             const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFFE8D0F0), width: 1.2),
+          borderSide: const BorderSide(color: Color(0xFFFFD0D0), width: 1.2),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFFE8D0F0), width: 1.2),
+          borderSide: const BorderSide(color: Color(0xFFFFD0D0), width: 1.2),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -141,13 +156,13 @@ class AppTheme {
         ),
         labelStyle: const TextStyle(color: AppColors.textSecondary),
         hintStyle: const TextStyle(color: AppColors.textSecondary),
-        prefixIconColor: AppColors.mauve,
+        prefixIconColor: AppColors.warmPink,
       ),
 
       // Chips
       chipTheme: ChipThemeData(
-        backgroundColor: const Color(0xFFF5E6FA),
-        selectedColor: AppColors.blush,
+        backgroundColor: const Color(0xFFFFE4E8),
+        selectedColor: AppColors.powderPink,
         labelStyle: const TextStyle(fontSize: 13, color: AppColors.textPrimary),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -157,7 +172,7 @@ class AppTheme {
       // BottomNav
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: Colors.white,
-        selectedItemColor: AppColors.lavender,
+        selectedItemColor: AppColors.pastelPink,
         unselectedItemColor: AppColors.textSecondary,
         elevation: 12,
         type: BottomNavigationBarType.fixed,
@@ -169,7 +184,7 @@ class AppTheme {
       cardTheme: CardTheme(
         color: Colors.white,
         elevation: 4,
-        shadowColor: AppColors.lavender.withOpacity(0.15),
+        shadowColor: AppColors.pastelPink.withOpacity(0.2),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18),
         ),
@@ -177,7 +192,7 @@ class AppTheme {
 
       // Divider
       dividerTheme: const DividerThemeData(
-        color: Color(0xFFEED8F5),
+        color: Color(0xFFFFE0E6),
         thickness: 1,
       ),
     );
@@ -186,7 +201,7 @@ class AppTheme {
 
 // ── Widgets reutilizables ────────────────────────────────────────────────────
 
-/// Fondo con degradado de la paleta Moon
+/// Fondo con degradado de la paleta Rosa Pastel
 class GradientBackground extends StatelessWidget {
   final Widget child;
   const GradientBackground({super.key, required this.child});
@@ -227,7 +242,7 @@ class GradientButton extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: enabled
               ? const LinearGradient(
-                  colors: [AppColors.lavender, AppColors.mauve, AppColors.purple],
+                  colors: [AppColors.pastelPink, AppColors.warmPink, AppColors.roseGold],
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                 )
@@ -237,12 +252,12 @@ class GradientButton extends StatelessWidget {
           boxShadow: enabled
               ? [
                   BoxShadow(
-                    color: AppColors.purple.withOpacity(0.35),
+                    color: AppColors.warmPink.withOpacity(0.4),
                     blurRadius: 16,
                     offset: const Offset(0, 5),
                   ),
                   BoxShadow(
-                    color: AppColors.lavender.withOpacity(0.25),
+                    color: AppColors.pastelPink.withOpacity(0.3),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),

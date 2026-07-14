@@ -34,6 +34,7 @@ public class UserService {
     }
 
     @Transactional
+    @SuppressWarnings("null")
     public @NonNull User updateProfile(@NonNull Long userId, @NonNull UpdateProfileRequest req) {
         User user = userRepository.findById(userId).orElseThrow();
 
